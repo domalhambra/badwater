@@ -33,7 +33,11 @@ async function deploy() {
 
             if (data.sync === true) {
                 // Convert Markdown to HTML here
-                const htmlContent = converter.makeHtml(content);
+                // Change this line:
+                    const htmlContent = converter.makeHtml(content);
+                    
+                    // To this (adds special comments that Ghost recognizes):
+                    const htmlContent = `${converter.makeHtml(content)}`;
                 
                 console.log(`Syncing: ${data.title}...`);
                 try {
