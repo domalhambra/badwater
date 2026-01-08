@@ -1,12 +1,15 @@
 ---
-title: "The Future of Obsidian and Ghost"
+title: Electromagnetic Channel 1-8
 sync: true
 status: draft
-tags: [Productivity, Writing, Tech]
-excerpt: "A deep dive into how I built an automated writing workflow."
-feature_image: "https://images.unsplash.com/photo-12345"
+tags:
+  - Productivity
+  - Writing
+  - Tech
+excerpt: The design of a relationship that inspires the world through unique self-expression
+feature_image: https://images.unsplash.com/photo-12345
 featured: true
-slug: obsidian-ghost-workflow
+slug: electromagnetic-channel-1-8
 ---
 
 # Electromagnetic Channel 1-8
