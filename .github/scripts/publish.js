@@ -2,9 +2,6 @@ const GhostAdminApi = require('@tryghost/admin-api');
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
-const showdown = require('showdown'); // This is the converter
-
-const converter = new showdown.Converter();
 
 const api = new GhostAdminApi({
     url: process.env.GHOST_API_URL,
