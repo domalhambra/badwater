@@ -1,5 +1,5 @@
 ---
-title: My Second Ghost Post
+title: My Third GhostPost
 sync: true
 status: draft
 ---
