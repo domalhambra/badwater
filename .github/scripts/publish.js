@@ -2,6 +2,9 @@ const GhostAdminApi = require('@tryghost/admin-api');
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
+const showdown = require('showdown');
+
+const converter = new showdown.Converter();
 
 const api = new GhostAdminApi({
     url: process.env.GHOST_API_URL,
@@ -24,6 +27,12 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
 
 async function deploy() {
     const postsDir = path.join(process.cwd(), 'Posts'); 
+    
+    if (!fs.existsSync(postsDir)) {
+        console.error("Error: 'Posts' folder not found!");
+        return;
+    }
+
     const allFiles = getAllFiles(postsDir);
 
     for (const filePath of allFiles) {
@@ -32,23 +41,23 @@ async function deploy() {
             const { data, content } = matter(fileContent);
 
             if (data.sync === true) {
-                // Convert Markdown to HTML here
-                // Change this line:
-                    const htmlContent = converter.makeHtml(content);
-                    
-                    // To this (adds special comments that Ghost recognizes):
-                    const htmlContent = `${converter.makeHtml(content)}`;
+                console.log(`--- Processing: ${data.title || filePath} ---`);
                 
-                console.log(`Syncing: ${data.title}...`);
+                // Debug: See if 'content' is actually being read
+                console.log(`Character count in body: ${content.trim().length}`);
+
+                const htmlBody = converter.makeHtml(content);
+                
                 try {
-                        await api.posts.add({
-                            title: data.title || path.basename(filePath, '.md'),
-                            html: htmlContent,
-                            status: data.status || 'draft'
-                        }, {source: 'html'}); // <--- Add this part right here!);
-                    console.log(`Successfully sent ${data.title} to Ghost!`);
+                    await api.posts.add({
+                        title: data.title || path.basename(filePath, '.md'),
+                        html: htmlBody,
+                        status: data.status || 'draft'
+                    }, {source: 'html'}); 
+                    
+                    console.log(`✅ Success: Sent to Ghost!`);
                 } catch (err) {
-                    console.error(`Error syncing ${filePath}:`, err.message);
+                    console.error(`❌ Ghost API Error:`, err.message);
                 }
             }
         }
