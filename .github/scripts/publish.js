@@ -27,12 +27,6 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
 
 async function deploy() {
     const postsDir = path.join(process.cwd(), 'Posts'); 
-    
-    if (!fs.existsSync(postsDir)) {
-        console.error("Error: 'Posts' folder not found!");
-        return;
-    }
-
     const allFiles = getAllFiles(postsDir);
 
     for (const filePath of allFiles) {
@@ -41,29 +35,45 @@ async function deploy() {
             const { data, content } = matter(fileContent);
 
             if (data.sync === true) {
-                console.log(`--- Processing: ${data.title || filePath} ---`);
+                const postSlug = data.slug || path.basename(filePath, '.md').toLowerCase().replace(/\s+/g, '-');
+                const htmlBody = `${converter.makeHtml(content)}`;
                 
-                // Debug: See if 'content' is actually being read
-                console.log(`Character count in body: ${content.trim().length}`);
+                console.log(`--- Checking: ${postSlug} ---`);
 
-                const htmlBody = converter.makeHtml(content);
-                
                 try {
-                    await api.posts.add({
-                        title: data.title || path.basename(filePath, '.md'),
-                        html: htmlBody,
-                        status: data.status || 'draft',
-                        
-                        // Add these new lines:
-                        tags: data.tags || [],            // Must be an array like [Tag1, Tag2]
-                        custom_excerpt: data.excerpt,      // Pulls from 'excerpt:' in YAML
-                        feature_image: data.feature_image, // Pulls from 'feature_image:'
-                        slug: data.slug,                  // Pulls from 'slug:'
-                        featured: data.featured || false   // Pulls from 'featured: true'
-                    }, {source: 'html'}); 
-                    console.log(`✅ Success: Sent to Ghost!`);
+                    // 1. Try to find if the post exists
+                    const existingPosts = await api.posts.browse({filter: `slug:${postSlug}`, limit: '1'});
+                    const postExists = existingPosts.length > 0;
+
+                    if (postExists) {
+                        // 2. UPDATE existing post
+                        const postId = existingPosts[0].id;
+                        await api.posts.edit({
+                            id: postId,
+                            updated_at: existingPosts[0].updated_at, // Required by Ghost for security
+                            title: data.title || postSlug,
+                            html: htmlBody,
+                            status: data.status || 'draft',
+                            tags: data.tags || [],
+                            custom_excerpt: data.excerpt || '',
+                            feature_image: data.feature_image || null
+                        }, {source: 'html'});
+                        console.log(`✅ Updated existing post: ${postSlug}`);
+                    } else {
+                        // 3. CREATE new post
+                        await api.posts.add({
+                            title: data.title || postSlug,
+                            slug: postSlug,
+                            html: htmlBody,
+                            status: data.status || 'draft',
+                            tags: data.tags || [],
+                            custom_excerpt: data.excerpt || '',
+                            feature_image: data.feature_image || null
+                        }, {source: 'html'});
+                        console.log(`✅ Created new post: ${postSlug}`);
+                    }
                 } catch (err) {
-                    console.error(`❌ Ghost API Error:`, err.message);
+                    console.error(`❌ Error with ${postSlug}:`, err.message);
                 }
             }
         }
