@@ -17,7 +17,7 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install @tryghost/admin-api gray-matter showdown
+        run: npm install @tryghost/admin-api gray-matter
 
       - name: Run Publish Script
         env:
