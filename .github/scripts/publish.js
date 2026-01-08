@@ -2,6 +2,9 @@ const GhostAdminApi = require('@tryghost/admin-api');
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
+const showdown = require('showdown'); // This is the converter
+
+const converter = new showdown.Converter();
 
 const api = new GhostAdminApi({
     url: process.env.GHOST_API_URL,
@@ -9,11 +12,9 @@ const api = new GhostAdminApi({
     version: 'v5.0'
 });
 
-// This function "walks" through all your folders
 const getAllFiles = (dirPath, arrayOfFiles) => {
   const files = fs.readdirSync(dirPath);
   arrayOfFiles = arrayOfFiles || [];
-
   files.forEach((file) => {
     if (fs.statSync(dirPath + "/" + file).isDirectory()) {
       arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
@@ -21,7 +22,6 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
       arrayOfFiles.push(path.join(dirPath, "/", file));
     }
   });
-
   return arrayOfFiles;
 };
 
@@ -35,11 +35,14 @@ async function deploy() {
             const { data, content } = matter(fileContent);
 
             if (data.sync === true) {
+                // Convert Markdown to HTML here
+                const htmlContent = converter.makeHtml(content);
+                
                 console.log(`Syncing: ${data.title}...`);
                 try {
                     await api.posts.add({
                         title: data.title || path.basename(filePath, '.md'),
-                        html: content,
+                        html: htmlContent, // Sending HTML instead of raw text
                         status: data.status || 'draft'
                     });
                     console.log(`Successfully sent ${data.title} to Ghost!`);
