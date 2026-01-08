@@ -1,0 +1,26 @@
+name: Deploy to Ghost
+on:
+  push:
+    branches:
+      - main  # This ensures it runs every time you push to your main branch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install @tryghost/admin-api gray-matter
+
+      - name: Run Publish Script
+        env:
+          GHOST_ADMIN_API_KEY: ${{ secrets.GHOST_ADMIN_API_KEY }}
+          GHOST_API_URL: ${{ secrets.GHOST_API_URL }}
+        run: node .github/scripts/publish.js
