@@ -37,11 +37,11 @@ async function deploy() {
                 
                 console.log(`Syncing: ${data.title}...`);
                 try {
-                    await api.posts.add({
-                        title: data.title || path.basename(filePath, '.md'),
-                        html: htmlContent, // Sending HTML instead of raw text
-                        status: data.status || 'draft'
-                    });
+                        await api.posts.add({
+                            title: data.title || path.basename(filePath, '.md'),
+                            html: htmlContent,
+                            status: data.status || 'draft'
+                        }, {source: 'html'}); // <--- Add this part right here!);
                     console.log(`Successfully sent ${data.title} to Ghost!`);
                 } catch (err) {
                     console.error(`Error syncing ${filePath}:`, err.message);
