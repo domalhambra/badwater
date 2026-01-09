@@ -128,13 +128,6 @@ If Gate 1 has other channels that give them energy or emotional definition, like
 
 **Reframe:** Instead of saying, "Why doesn't anyone see how amazing we are?" each person can ask, "Who is actually ready to be changed by what we have to offer? Who has genuinely recognized us and invited us to inspire them?"
 
-| **If you feel...**          | **It might mean...**                               | **The "Healthy" Move**                              |
-| :-------------------------- | :------------------------------------------------- | :-------------------------------------------------- |
-| **Bitter and unrecognized** | You've been expressing first before being invited. | Step back. Wait. Let your aura attract recognition. |
-| **Creatively blocked**      | You're trying to control expression mentally.      | Let go. Let your identity speak spontaneously.      |
-| **Pressure to be "normal"** | You're forgetting your design is to be different.  | Embrace the weird. Your difference is your gift.    |
-| **Sad or melancholic**      | This might be where creativity is processing.      | Don't fix it. Sit with it. Create from it.          |
-
 ---
 
 ### Final Thoughts
