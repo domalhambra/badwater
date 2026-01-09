@@ -6,7 +6,7 @@ tags:
   - humandesign
   - channels
   - relationships
-excerpt: The design of a relationship that inspires the world through unique self-expression
+excerpt: '"... stop trying to force it all and start trusting that your authenticity is magnetic."'
 feature_image:
 featured: false
 slug: electromagnetic-channel-1-8
