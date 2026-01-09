@@ -1,5 +1,5 @@
 ---
-title: The Future of Obsidian and Ghost
+title: Electromagnetic Channel 1-8
 sync: true
 status: draft
 tags:
