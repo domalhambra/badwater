@@ -14,7 +14,6 @@ slug: electromagnetic-channel-1-8
 
 ## The design of a relationship that inspires the world through unique self-expression
 
-
 ---
 
 ### For Newcomers
