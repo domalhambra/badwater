@@ -1,6 +1,6 @@
 ---
 title: Electromagnetic Channel 2-14
-sync: true
+sync: false
 status: draft
 tags:
   - humandesign
